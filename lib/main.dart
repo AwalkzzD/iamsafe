@@ -38,6 +38,8 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,15 +70,16 @@ class _MainScreenState extends State<MainScreen> {
             Container(
               //Phone Number Input Field (TextField)
               padding: const EdgeInsets.fromLTRB(50, 100, 50, 0),
-              child: const TextField(
+              child: TextField(
+                controller: phoneController,
                 keyboardType: TextInputType.phone,
                 cursorColor: Colors.amber,
-                style: TextStyle(
+                style: const TextStyle(
                     fontFamily: 'RobotoSlab',
                     fontSize: 20.0,
                     letterSpacing: 2.0),
                 maxLength: 10,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(width: 3, color: Colors.amber),
                     ),
@@ -87,15 +90,16 @@ class _MainScreenState extends State<MainScreen> {
             Container(
               //Password Input Field (TextField)
               padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
-              child: const TextField(
+              child: TextField(
+                controller: passwordController,
                 obscureText: true,
                 cursorColor: Colors.amber,
-                style: TextStyle(
+                style: const TextStyle(
                     fontFamily: 'RobotoSlab',
                     fontSize: 20.0,
                     letterSpacing: 2.0),
                 maxLength: 10,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(width: 3, color: Colors.amber),
                     ),
@@ -114,7 +118,10 @@ class _MainScreenState extends State<MainScreen> {
                     color: Colors.black,
                     fontFamily: 'RobotoSlab',
                     fontSize: 20.0),
-                onPress: () {},
+                onPress: () {
+                  print(phoneController.value.text);
+                  print(passwordController.value.text);
+                },
                 height: 50,
                 width: 150,
                 selectedTextColor: Colors.black,
@@ -126,7 +133,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
             Container(
               //Not a user? Sign Up Text
-              padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
               child: const Text(
                 'Not a user? Sign Up now',
                 style: TextStyle(
