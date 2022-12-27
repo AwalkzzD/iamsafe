@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "490412097829",
+    "project_id": "iamsafe-d449d",
+    "storage_bucket": "iamsafe-d449d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:490412097829:android:f5b0dc46a5d7cdb214dacc",
+        "android_client_info": {
+          "package_name": "com.example.iamsafe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "490412097829-vei8e7mp7rth4tvebdv0c4dondn1ho4t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZvEBzSxQ4AEgsWhTRyM1AxgBSUApnHY8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "490412097829-vei8e7mp7rth4tvebdv0c4dondn1ho4t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
