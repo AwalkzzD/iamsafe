@@ -1,136 +1,7 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_animated_button/flutter_animated_button.dart';
-
-// void main(List<String> args) {
-//   runApp(LoginPage());
-// }
-
-// class LoginPage extends StatefulWidget {
-//   const LoginPage({super.key});
-
-//   @override
-//   State<LoginPage> createState() => _LoginPageState();
-// }
-
-// class _LoginPageState extends State<LoginPage> {
-//   TextEditingController phoneController = TextEditingController();
-//   TextEditingController passwordController = TextEditingController();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       home: Scaffold(
-//         resizeToAvoidBottomInset: false,
-//         appBar: AppBar(
-//           title: const Text('IamSafe'),
-//           leading: const Icon(
-//             Icons.woman,
-//             color: Colors.black,
-//             size: 45.0,
-//           ),
-//           backgroundColor: Colors.amber,
-//           titleTextStyle: const TextStyle(
-//               color: Colors.black, fontSize: 20, fontFamily: 'RobotoSlab'),
-//         ),
-//         body: SingleChildScrollView(
-//           child: Column(
-//             children: <Widget>[
-//               Container(
-//                 //Welcome Text Container
-//                 padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
-//                 margin: const EdgeInsets.all(20.0),
-//                 child: const Text(
-//                   'Welcome to IamSafe',
-//                   style: TextStyle(fontSize: 30.0, fontFamily: 'RobotoSlab'),
-//                 ),
-//               ),
-//               Container(
-//                 //Phone Number Input Field (TextField)
-//                 padding: const EdgeInsets.fromLTRB(50, 100, 50, 0),
-//                 child: TextField(
-//                   controller: phoneController,
-//                   keyboardType: TextInputType.phone,
-//                   cursorColor: Colors.amber,
-//                   style: const TextStyle(
-//                       fontFamily: 'RobotoSlab',
-//                       fontSize: 20.0,
-//                       letterSpacing: 2.0),
-//                   maxLength: 10,
-//                   decoration: const InputDecoration(
-//                       focusedBorder: OutlineInputBorder(
-//                         borderSide: BorderSide(width: 3, color: Colors.amber),
-//                       ),
-//                       labelText: 'Enter phone number...',
-//                       labelStyle: TextStyle(color: Colors.deepOrangeAccent)),
-//                 ),
-//               ),
-//               Container(
-//                 //Password Input Field (TextField)
-//                 padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
-//                 child: TextField(
-//                   controller: passwordController,
-//                   obscureText: true,
-//                   cursorColor: Colors.amber,
-//                   style: const TextStyle(
-//                       fontFamily: 'RobotoSlab',
-//                       fontSize: 20.0,
-//                       letterSpacing: 2.0),
-//                   maxLength: 10,
-//                   decoration: const InputDecoration(
-//                       focusedBorder: OutlineInputBorder(
-//                         borderSide: BorderSide(width: 3, color: Colors.amber),
-//                       ),
-//                       labelText: 'Enter your password...',
-//                       labelStyle: TextStyle(color: Colors.deepOrangeAccent)),
-//                 ),
-//               ),
-//               Container(
-//                 //Login Button Container
-//                 padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
-//                 margin: const EdgeInsets.all(0),
-//                 child: AnimatedButton(
-//                   animatedOn: AnimatedOn.onTap,
-//                   text: 'LOGIN',
-//                   textStyle: const TextStyle(
-//                       color: Colors.black,
-//                       fontFamily: 'RobotoSlab',
-//                       fontSize: 20.0),
-//                   onPress: () {
-//                     // print(phoneController.value.text);
-//                     // print(passwordController.value.text);
-//                   },
-//                   height: 50,
-//                   width: 150,
-//                   selectedTextColor: Colors.black,
-//                   transitionType: TransitionType.LEFT_BOTTOM_ROUNDER,
-//                   backgroundColor: Colors.amber,
-//                   borderColor: Colors.transparent,
-//                   borderWidth: 1,
-//                 ),
-//               ),
-//               Container(
-//                 //Not a user? Sign Up Text
-//                 padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-//                 child: const Text(
-//                   'Not a user? Sign Up now',
-//                   style: TextStyle(
-//                       color: Colors.deepOrange,
-//                       fontFamily: 'RobotoSlab',
-//                       fontSize: 20.0),
-//                 ),
-//               )
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'dart:async';
 
 void main(List<String> args) {
@@ -146,8 +17,10 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   late String phoneNumber, verificationId;
   late String otp, authStatus = "";
+  final pinController = TextEditingController();
 
   Future<void> verifyPhoneNumber(BuildContext context) async {
+    // CircularProgressIndicator();
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phoneNumber,
       timeout: const Duration(seconds: 15),
@@ -182,36 +55,68 @@ class _LoginPageState extends State<LoginPage> {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
-          // ignore: unnecessary_new
-          return new AlertDialog(
-            title: const Text('Enter your OTP'),
-            content: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextFormField(
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(30),
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  const Text(
+                    'Enter your OTP...',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontFamily: 'RobotoSlab',
+                      color: Colors.amber,
                     ),
                   ),
-                ),
-                onChanged: (value) {
-                  otp = value;
-                },
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                  ),
+                  Container(
+                    child: OtpTextField(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      textStyle: const TextStyle(
+                        fontSize: 15,
+                        fontFamily: 'RobotoSlab',
+                      ),
+                      numberOfFields: 6,
+                      borderColor: const Color.fromARGB(255, 255, 191, 0),
+                      showFieldAsBox: true,
+                      keyboardType: TextInputType.number,
+                      margin: EdgeInsets.only(right: 8.0),
+                      fieldWidth: 30,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            width: 2,
+                            color: Colors.amber,
+                          ),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            width: 2,
+                            color: Colors.amber,
+                          ),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                      ),
+                      focusedBorderColor: Colors.amber,
+                      onCodeChanged: (String code) {},
+                      onSubmit: (String verificationCode) {
+                        otp = verificationCode;
+                        Navigator.of(context).pop();
+                        signIn(otp);
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
-            contentPadding: const EdgeInsets.all(10.0),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  signIn(otp);
-                },
-                child: const Text(
-                  'Submit',
-                ),
-              ),
-            ],
           );
         });
   }
@@ -284,7 +189,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.fromLTRB(15, 7, 15, 7),
+                padding: const EdgeInsets.fromLTRB(15, 7, 15, 7),
                 backgroundColor: Colors.amber,
                 elevation: 7.0,
                 shape: RoundedRectangleBorder(
