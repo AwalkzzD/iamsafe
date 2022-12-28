@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Phone Auth Demo"),
+        title: const Text("IamSafe"),
         backgroundColor: Colors.cyan,
       ),
       body: FutureBuilder(
@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Text(
-                        "SignIn Success 😊",
+                        "SignIn Success",
                         style: TextStyle(
                           color: Colors.green,
                           fontWeight: FontWeight.bold,

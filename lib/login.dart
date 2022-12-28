@@ -182,15 +182,16 @@ class _LoginPageState extends State<LoginPage> {
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
+          // ignore: unnecessary_new
           return new AlertDialog(
             title: const Text('Enter your OTP'),
             content: Padding(
               padding: const EdgeInsets.all(8.0),
               child: TextFormField(
-                decoration: InputDecoration(
-                  border: new OutlineInputBorder(
-                    borderRadius: const BorderRadius.all(
-                      const Radius.circular(30),
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(30),
                     ),
                   ),
                 ),
@@ -230,71 +231,75 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.2,
+            const SizedBox(
+              height: 100,
             ),
             const Text(
-              "Phone Auth demo📱",
+              'Welcome to IamSafe',
               style: TextStyle(
-                color: Colors.cyan,
-                fontSize: 30,
+                color: Colors.amber,
+                fontSize: 25,
+                fontFamily: 'RobotoSlab',
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Image.network(
-              "https://avatars1.githubusercontent.com/u/41328571?s=280&v=4",
-              height: 150,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
+              child: Image.asset(
+                'assets/IamSafe.png',
+                height: 230,
+                width: 230,
+              ),
             ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.fromLTRB(30, 90, 30, 0),
               child: TextField(
                 keyboardType: TextInputType.phone,
+                cursorColor: Colors.amber,
                 decoration: InputDecoration(
-                    border: const OutlineInputBorder(
+                    focusedBorder: const OutlineInputBorder(
+                      borderSide: BorderSide(
+                        width: 3,
+                        color: Colors.amberAccent,
+                      ),
                       borderRadius: BorderRadius.all(
-                        Radius.circular(30),
+                        Radius.circular(12),
                       ),
                     ),
                     filled: true,
                     prefixIcon: const Icon(
-                      Icons.phone_iphone,
-                      color: Colors.cyan,
+                      Icons.phone_android,
+                      color: Colors.amber,
                     ),
-                    hintStyle: TextStyle(color: Colors.grey[800]),
-                    hintText: "Enter Your Phone Number...",
-                    fillColor: Colors.white70),
+                    hintStyle: TextStyle(color: Colors.grey[600]),
+                    hintText: "Enter phone number...",
+                    fillColor: Colors.amber[50]),
                 onChanged: (value) {
                   phoneNumber = value;
                 },
               ),
             ),
             const SizedBox(
-              height: 10.0,
+              height: 30.0,
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: Colors.cyan,
+                padding: EdgeInsets.fromLTRB(15, 7, 15, 7),
+                backgroundColor: Colors.amber,
                 elevation: 7.0,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30)),
+                    borderRadius: BorderRadius.circular(12)),
               ),
               onPressed: () =>
                   phoneNumber == null ? null : verifyPhoneNumber(context),
               child: const Text(
                 "Generate OTP",
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontFamily: 'RobotoSlab',
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            const Text("Need Help?"),
-            const SizedBox(
-              height: 20,
-            ),
-            const Text(
-              "Please enter the phone number followed by country code",
-              style: TextStyle(color: Colors.green),
             ),
             const SizedBox(
               height: 20,
