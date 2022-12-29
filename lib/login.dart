@@ -15,7 +15,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  late String phoneNumber, verificationId;
+  late String phoneNumber;
+  late String verificationId;
   late String otp, authStatus = "";
   final pinController = TextEditingController();
 
@@ -89,14 +90,14 @@ class _LoginPageState extends State<LoginPage> {
                       fieldWidth: 30,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             width: 2,
                             color: Colors.amber,
                           ),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                             width: 2,
                             color: Colors.amber,
                           ),
@@ -131,93 +132,105 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const SizedBox(
-              height: 100,
-            ),
-            const Text(
-              'Welcome to IamSafe',
-              style: TextStyle(
-                color: Colors.amber,
-                fontSize: 25,
-                fontFamily: 'RobotoSlab',
-                fontWeight: FontWeight.bold,
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const SizedBox(
+                height: 100,
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
-              child: Image.asset(
-                'assets/IamSafe.png',
-                height: 230,
-                width: 230,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(30, 90, 30, 0),
-              child: TextField(
-                keyboardType: TextInputType.phone,
-                cursorColor: Colors.amber,
-                decoration: InputDecoration(
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                        width: 3,
-                        color: Colors.amberAccent,
-                      ),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(12),
-                      ),
-                    ),
-                    filled: true,
-                    prefixIcon: const Icon(
-                      Icons.phone_android,
-                      color: Colors.amber,
-                    ),
-                    hintStyle: TextStyle(color: Colors.grey[600]),
-                    hintText: "Enter phone number...",
-                    fillColor: Colors.amber[50]),
-                onChanged: (value) {
-                  phoneNumber = value;
-                },
-              ),
-            ),
-            const SizedBox(
-              height: 30.0,
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.fromLTRB(15, 7, 15, 7),
-                backgroundColor: Colors.amber,
-                elevation: 7.0,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
-              ),
-              onPressed: () =>
-                  phoneNumber == null ? null : verifyPhoneNumber(context),
-              child: const Text(
-                "Generate OTP",
+              const Text(
+                'Welcome to IamSafe',
                 style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
+                  color: Colors.amber,
+                  fontSize: 25,
                   fontFamily: 'RobotoSlab',
+                  fontWeight: FontWeight.bold,
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Text(
-              authStatus == "" ? "" : authStatus,
-              style: TextStyle(
-                  color: authStatus.contains("fail") ||
-                          authStatus.contains("TIMEOUT")
-                      ? Colors.red
-                      : Colors.green),
-            )
-          ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
+                child: Image.asset(
+                  'assets/IamSafe.png',
+                  height: 230,
+                  width: 230,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(30, 90, 30, 0),
+                child: TextField(
+                  keyboardType: TextInputType.phone,
+                  cursorColor: Colors.amber,
+                  decoration: InputDecoration(
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 3,
+                          color: Colors.amber,
+                        ),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(12),
+                        ),
+                      ),
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 3,
+                          color: Colors.amberAccent,
+                        ),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(12),
+                        ),
+                      ),
+                      filled: true,
+                      prefixIcon: const Icon(
+                        Icons.phone_android,
+                        color: Colors.amber,
+                      ),
+                      hintStyle: TextStyle(color: Colors.grey[600]),
+                      hintText: "Enter phone number...",
+                      fillColor: Colors.amber[50]),
+                  onChanged: (value) {
+                    phoneNumber = value;
+                  },
+                ),
+              ),
+              const SizedBox(
+                height: 30.0,
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.fromLTRB(15, 7, 15, 7),
+                  backgroundColor: Colors.amber,
+                  elevation: 7.0,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                ),
+                onPressed: () =>
+                    phoneNumber == null ? null : verifyPhoneNumber(context),
+                child: const Text(
+                  "Generate OTP",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontFamily: 'RobotoSlab',
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Text(
+                authStatus == "" ? "" : authStatus,
+                style: TextStyle(
+                    color: authStatus.contains("fail") ||
+                            authStatus.contains("TIMEOUT")
+                        ? Colors.red
+                        : Colors.green),
+              )
+            ],
+          ),
         ),
       ),
     );

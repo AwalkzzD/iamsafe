@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("IamSafe"),
-        backgroundColor: Colors.cyan,
+        backgroundColor: Colors.amber,
       ),
       body: FutureBuilder(
         future: Future.value(FirebaseAuth.instance.currentUser),
@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
                       const Text(
                         "SignIn Success",
                         style: TextStyle(
-                          color: Colors.green,
+                          color: Colors.amber,
                           fontWeight: FontWeight.bold,
                           fontSize: 30,
                         ),

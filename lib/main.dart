@@ -17,10 +17,10 @@ class SplashScreen extends StatelessWidget {
     return MaterialApp(
       title: 'SplashScreen',
       home: AnimatedSplashScreen(
-        splash: Icons.woman,
+        splash: 'assets/splash_screen_image.png',
         nextScreen: CheckLogin(),
-        splashIconSize: 120,
-        duration: 2500,
+        splashIconSize: 300,
+        duration: 3500,
         splashTransition: SplashTransition.fadeTransition,
         backgroundColor: Colors.amber,
       ),

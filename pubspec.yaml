@@ -43,7 +43,6 @@ dependencies:
   firebase_auth: ^4.2.3
   cloud_firestore: ^4.3.0
   firebase_core: ^2.4.0
-  # pinput: ^2.2.20
   flutter_otp_text_field: ^1.1.1
 
 dev_dependencies:
@@ -70,6 +69,7 @@ flutter:
 
   assets:
     - assets/IamSafe.png
+    - assets/splash_screen_image.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
