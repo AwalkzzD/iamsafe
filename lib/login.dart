@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'dart:async';
+
+import 'package:pinput/pinput.dart';
 
 void main(List<String> args) {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +22,22 @@ class _LoginPageState extends State<LoginPage> {
   late String otp, authStatus = "";
   final pinController = TextEditingController();
 
+  void customToast(String message, BuildContext context) {
+    showToast(message,
+        textStyle: const TextStyle(
+          fontSize: 14,
+          color: Colors.amberAccent,
+          fontFamily: 'RobotoSlab',
+        ),
+        borderRadius: BorderRadius.circular(15),
+        animation: StyledToastAnimation.slideFromTopFade,
+        position: StyledToastPosition.top,
+        animDuration: const Duration(milliseconds: 50),
+        duration: const Duration(seconds: 2),
+        backgroundColor: Colors.grey[600],
+        context: context);
+  }
+
   Future<void> verifyPhoneNumber(BuildContext context) async {
     // CircularProgressIndicator();
     await FirebaseAuth.instance.verifyPhoneNumber(
@@ -28,17 +46,20 @@ class _LoginPageState extends State<LoginPage> {
       verificationCompleted: (AuthCredential authCredential) {
         setState(() {
           authStatus = "Your account is successfully verified";
+          customToast(authStatus, context);
         });
       },
       verificationFailed: (FirebaseAuthException authException) {
         setState(() {
           authStatus = "Authentication failed";
+          customToast(authStatus, context);
         });
       },
       codeSent: (String verId, [int? forceCodeResent]) {
         verificationId = verId;
         setState(() {
-          authStatus = "OTP has been successfully send";
+          authStatus = "OTP sent successfully";
+          customToast(authStatus, context);
         });
         otpDialogBox(context).then((value) {});
       },
@@ -58,61 +79,47 @@ class _LoginPageState extends State<LoginPage> {
         builder: (BuildContext context) {
           return AlertDialog(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(9),
             ),
             content: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
                   const Text(
-                    'Enter your OTP...',
+                    'Enter OTP...',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 15,
                       fontFamily: 'RobotoSlab',
                       color: Colors.amber,
                     ),
                   ),
                   const Padding(
-                    padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                    padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
                   ),
                   Container(
-                    child: OtpTextField(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      textStyle: const TextStyle(
-                        fontSize: 15,
-                        fontFamily: 'RobotoSlab',
-                      ),
-                      numberOfFields: 6,
-                      borderColor: const Color.fromARGB(255, 255, 191, 0),
-                      showFieldAsBox: true,
-                      keyboardType: TextInputType.number,
-                      margin: EdgeInsets.only(right: 8.0),
-                      fieldWidth: 30,
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            width: 2,
-                            color: Colors.amber,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            width: 2,
-                            color: Colors.amber,
-                          ),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        contentPadding:
-                            EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                      ),
-                      focusedBorderColor: Colors.amber,
-                      onCodeChanged: (String code) {},
-                      onSubmit: (String verificationCode) {
-                        otp = verificationCode;
+                    child: Pinput(
+                      length: 6,
+                      obscureText: true,
+                      obscuringCharacter: '*',
+                      controller: pinController,
+                      androidSmsAutofillMethod:
+                          AndroidSmsAutofillMethod.smsRetrieverApi,
+                      onCompleted: (value) {
+                        otp = value;
                         Navigator.of(context).pop();
                         signIn(otp);
                       },
+                      defaultPinTheme: PinTheme(
+                        width: 30,
+                        height: 50,
+                        textStyle: const TextStyle(
+                          fontSize: 20,
+                          color: Colors.amber,
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.amber),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -123,11 +130,19 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> signIn(String otp) async {
-    await FirebaseAuth.instance
-        .signInWithCredential(PhoneAuthProvider.credential(
-      verificationId: verificationId,
-      smsCode: otp,
-    ));
+    try {
+      await FirebaseAuth.instance
+          .signInWithCredential(PhoneAuthProvider.credential(
+        verificationId: verificationId,
+        smsCode: otp,
+      ));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'invalid-verification-code') {
+        customToast('Invalid Code', context);
+      } else {
+        customToast('Something went wrong!', context);
+      }
+    }
   }
 
   @override
@@ -162,6 +177,13 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(30, 90, 30, 0),
                 child: TextField(
+                  autocorrect: true,
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontFamily: 'RobotoSlab',
+                    letterSpacing: 2.5,
+                    color: Colors.black,
+                  ),
                   keyboardType: TextInputType.phone,
                   cursorColor: Colors.amber,
                   decoration: InputDecoration(
@@ -188,11 +210,14 @@ class _LoginPageState extends State<LoginPage> {
                         Icons.phone_android,
                         color: Colors.amber,
                       ),
-                      hintStyle: TextStyle(color: Colors.grey[600]),
+                      hintStyle: TextStyle(
+                          color: Colors.grey[600],
+                          fontSize: 13,
+                          letterSpacing: 0),
                       hintText: "Enter phone number...",
                       fillColor: Colors.amber[50]),
                   onChanged: (value) {
-                    phoneNumber = value;
+                    phoneNumber = '+91$value';
                   },
                 ),
               ),
@@ -207,8 +232,10 @@ class _LoginPageState extends State<LoginPage> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),
                 ),
-                onPressed: () =>
-                    phoneNumber == null ? null : verifyPhoneNumber(context),
+                onPressed: () {
+                  phoneNumber == null ? null : verifyPhoneNumber(context);
+                  customToast('Authentication Started', context);
+                },
                 child: const Text(
                   "Generate OTP",
                   style: TextStyle(
@@ -221,14 +248,6 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(
                 height: 20,
               ),
-              Text(
-                authStatus == "" ? "" : authStatus,
-                style: TextStyle(
-                    color: authStatus.contains("fail") ||
-                            authStatus.contains("TIMEOUT")
-                        ? Colors.red
-                        : Colors.green),
-              )
             ],
           ),
         ),

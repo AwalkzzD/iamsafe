@@ -20,7 +20,7 @@ class SplashScreen extends StatelessWidget {
         splash: 'assets/splash_screen_image.png',
         nextScreen: CheckLogin(),
         splashIconSize: 300,
-        duration: 3500,
+        duration: 2000,
         splashTransition: SplashTransition.fadeTransition,
         backgroundColor: Colors.amber,
       ),
