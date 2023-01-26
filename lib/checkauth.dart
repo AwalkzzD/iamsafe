@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:iamsafe/home.dart';
+import 'package:iamsafe/introductionpage.dart';
 import 'package:iamsafe/login.dart';
 
 void main() {
@@ -26,7 +27,7 @@ class CheckLogin extends StatelessWidget {
             } else if (userSnapshot.hasError) {
               return const CircularProgressIndicator();
             }
-            return LoginPage();
+            return OnBoardingPage();
           },
         ));
   }
