@@ -39,7 +39,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> verifyPhoneNumber(BuildContext context) async {
-    // CircularProgressIndicator();
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: phoneNumber,
       timeout: const Duration(seconds: 15),
@@ -98,8 +97,6 @@ class _LoginPageState extends State<LoginPage> {
                   Container(
                     child: Pinput(
                       length: 6,
-                      obscureText: true,
-                      obscuringCharacter: '*',
                       controller: pinController,
                       androidSmsAutofillMethod:
                           AndroidSmsAutofillMethod.smsRetrieverApi,
@@ -235,6 +232,7 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () {
                   phoneNumber == null ? null : verifyPhoneNumber(context);
                   customToast('Authentication Started', context);
+                  CircularProgressIndicator();
                 },
                 child: const Text(
                   "Generate OTP",
