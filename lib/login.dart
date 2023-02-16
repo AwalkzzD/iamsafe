@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:iamsafe/database.dart';
+import 'package:iamsafe/home.dart';
 import 'dart:async';
 
 import 'package:pinput/pinput.dart';
@@ -94,28 +96,26 @@ class _LoginPageState extends State<LoginPage> {
                   const Padding(
                     padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
                   ),
-                  Container(
-                    child: Pinput(
-                      length: 6,
-                      controller: pinController,
-                      androidSmsAutofillMethod:
-                          AndroidSmsAutofillMethod.smsRetrieverApi,
-                      onCompleted: (value) {
-                        otp = value;
-                        Navigator.of(context).pop();
-                        signIn(otp);
-                      },
-                      defaultPinTheme: PinTheme(
-                        width: 30,
-                        height: 50,
-                        textStyle: const TextStyle(
-                          fontSize: 20,
-                          color: Colors.amber,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.amber),
-                          borderRadius: BorderRadius.circular(5),
-                        ),
+                  Pinput(
+                    length: 6,
+                    controller: pinController,
+                    androidSmsAutofillMethod:
+                        AndroidSmsAutofillMethod.smsRetrieverApi,
+                    onCompleted: (value) {
+                      otp = value;
+                      Navigator.of(context).pop();
+                      signIn(otp);
+                    },
+                    defaultPinTheme: PinTheme(
+                      width: 30,
+                      height: 50,
+                      textStyle: const TextStyle(
+                        fontSize: 20,
+                        color: Colors.amber,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.amber),
+                        borderRadius: BorderRadius.circular(5),
                       ),
                     ),
                   ),
@@ -127,12 +127,25 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> signIn(String otp) async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
     try {
-      await FirebaseAuth.instance
-          .signInWithCredential(PhoneAuthProvider.credential(
-        verificationId: verificationId,
-        smsCode: otp,
-      ));
+      // await FirebaseAuth.instance
+      //     .signInWithCredential(PhoneAuthProvider.credential(
+      //   verificationId: verificationId,
+      //   smsCode: otp,
+      // ));
+
+      UserCredential result = await _auth.signInWithCredential(
+          PhoneAuthProvider.credential(
+              verificationId: verificationId, smsCode: otp));
+
+      User? user = result.user;
+
+      await DatabaseService(uid: user?.uid).updateUserData('XYZ', 'ABC');
+
+      // ignore: use_build_context_synchronously
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => HomePage()));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'invalid-verification-code') {
         customToast('Invalid Code', context);
@@ -232,7 +245,7 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () {
                   phoneNumber == null ? null : verifyPhoneNumber(context);
                   customToast('Authentication Started', context);
-                  CircularProgressIndicator();
+                  const CircularProgressIndicator();
                 },
                 child: const Text(
                   "Generate OTP",

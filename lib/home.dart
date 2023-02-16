@@ -1,7 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:iamsafe/database.dart';
 import 'package:iamsafe/location.dart';
+import 'package:iamsafe/microphone.dart';
+import 'package:iamsafe/profilepage.dart';
 
 import 'login.dart';
 
@@ -37,27 +40,32 @@ class _HomePageState extends State<HomePage> {
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-            const UserAccountsDrawerHeader(
-              decoration: BoxDecoration(
+            UserAccountsDrawerHeader(
+              decoration: const BoxDecoration(
                 color: Colors.amber,
               ),
-              accountName: Text(
+              accountName: const Text(
                 "Feni Patel",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              accountEmail: Text(
+              accountEmail: const Text(
                 "patelfeni350@gmail.com",
                 style: TextStyle(fontWeight: FontWeight.w300),
               ),
-              currentAccountPicture: FlutterLogo(),
+              currentAccountPicture: CircleAvatar(
+                child: Image.asset('assets/default_profile_photo.png'),
+              ),
             ),
             ListTile(
               leading: const Icon(Icons.person),
               title: const Text('Profile'),
               onTap: () {
-                _logout();
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ProfilePage()));
               },
             ),
             ListTile(
@@ -69,6 +77,14 @@ class _HomePageState extends State<HomePage> {
                 _logout();
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.mic),
+              title: const Text('Microphone'),
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SoundDetector()));
+              },
+            ),
           ],
         ),
       ),
@@ -76,6 +92,7 @@ class _HomePageState extends State<HomePage> {
         future: Future.value(FirebaseAuth.instance.currentUser),
         builder: (context, snapshot) {
           User? user = snapshot.data;
+
           return snapshot.hasData
               ? Center(
                   child: Column(
@@ -108,7 +125,7 @@ class _HomePageState extends State<HomePage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const GeoTracking()));
+                                  builder: (context) => GeoTracking()));
                         },
                         child: const Text(
                           "Add SafePoints",

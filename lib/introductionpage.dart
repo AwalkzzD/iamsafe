@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+
 import 'package:iamsafe/login.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
@@ -39,7 +37,7 @@ class OnBoardingPage extends StatelessWidget {
           body:
               "Women are constantly facing various obstacles inside and outside the home. For example, the insecurity of travelling, constant sexual harassment and the uncertainty of the proper implementation of the law are hindering the free movement of women.",
           image: Container(
-            padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
             child: Image.asset(
               'assets/introduction_screen_1.png',
               scale: 2.9,
@@ -52,7 +50,7 @@ class OnBoardingPage extends StatelessWidget {
           body:
               "IamSafe gives you 24/7 digital protection. You will get our help and support directly in danger in any place like roadside, vehicle, workplace. Also your loved ones will get your location. Regular updates.",
           image: Container(
-            padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
             child: Image.asset(
               'assets/introduction_screen_2.png',
               scale: 2.9,
@@ -65,7 +63,7 @@ class OnBoardingPage extends StatelessWidget {
           body:
               "Be it in city or village, offline or online, your location information will be reported to your loved ones and law enforcement agencies at the push of a button. You will always be in our safety shelter.",
           image: Container(
-            padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
             child: Image.asset(
               'assets/introduction_screen_3.png',
               scale: 2.9,
@@ -82,7 +80,7 @@ class OnBoardingPage extends StatelessWidget {
         ),
       ),
       onDone: () {
-        Navigator.push(
+        Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => LoginPage()));
       },
       showSkipButton: true,
