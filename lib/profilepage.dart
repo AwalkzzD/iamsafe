@@ -9,6 +9,8 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime _selectedDate = DateTime.now();
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(

@@ -19,6 +19,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  late String userID;
   late String phoneNumber;
   late String verificationId;
   late String otp, authStatus = "";
@@ -141,7 +142,8 @@ class _LoginPageState extends State<LoginPage> {
 
       User? user = result.user;
 
-      await DatabaseService(uid: user?.uid).updateUserData('XYZ', 'ABC');
+      final dBresult = await DatabaseService()
+          .addUser(uid: user!.uid, phonenum: user.phoneNumber!);
 
       // ignore: use_build_context_synchronously
       Navigator.push(
@@ -243,6 +245,7 @@ class _LoginPageState extends State<LoginPage> {
                       borderRadius: BorderRadius.circular(12)),
                 ),
                 onPressed: () {
+                  // ignore: unnecessary_null_comparison
                   phoneNumber == null ? null : verifyPhoneNumber(context);
                   customToast('Authentication Started', context);
                   const CircularProgressIndicator();

@@ -6,8 +6,6 @@ import 'package:iamsafe/location.dart';
 import 'package:iamsafe/microphone.dart';
 import 'package:iamsafe/profilepage.dart';
 
-import 'login.dart';
-
 void main(List<String> args) {
   WidgetsFlutterBinding.ensureInitialized();
   Firebase.initializeApp();
@@ -19,14 +17,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late Map<dynamic, dynamic> _map;
+  String phoneNum = "+91XXXXXXXX";
+  String userID = "PASJawen2nRL023";
   Future<void> _logout() async {
     try {
       await FirebaseAuth.instance.signOut();
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => LoginPage()));
+      // Navigator.push(
+      //     context, MaterialPageRoute(builder: (context) => LoginPage()));
     } catch (e) {
+      // ignore: avoid_print
       print(e.toString());
     }
+  }
+
+  getData(String uid) async {
+    _map = (await DatabaseService().getUser(uid));
+    setState(() {
+      phoneNum = _map['phoneNum'].toString();
+      userID = _map['userID'].toString();
+    });
   }
 
   @override
@@ -44,15 +54,15 @@ class _HomePageState extends State<HomePage> {
               decoration: const BoxDecoration(
                 color: Colors.amber,
               ),
-              accountName: const Text(
-                "Feni Patel",
-                style: TextStyle(
+              accountName: Text(
+                phoneNum,
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              accountEmail: const Text(
-                "patelfeni350@gmail.com",
-                style: TextStyle(fontWeight: FontWeight.w300),
+              accountEmail: Text(
+                userID,
+                style: const TextStyle(fontWeight: FontWeight.w300),
               ),
               currentAccountPicture: CircleAvatar(
                 child: Image.asset('assets/default_profile_photo.png'),
@@ -69,20 +79,32 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             ListTile(
+              leading: const Icon(Icons.mic),
+              title: const Text('Microphone'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SoundDetector()));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.location_on),
+              title: const Text('Location'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const GeoTracking()));
+              },
+            ),
+            ListTile(
               leading: const Icon(
                 Icons.logout,
               ),
               title: const Text('Logout'),
               onTap: () {
                 _logout();
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.mic),
-              title: const Text('Microphone'),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SoundDetector()));
               },
             ),
           ],
@@ -92,7 +114,7 @@ class _HomePageState extends State<HomePage> {
         future: Future.value(FirebaseAuth.instance.currentUser),
         builder: (context, snapshot) {
           User? user = snapshot.data;
-
+          getData(user!.uid);
           return snapshot.hasData
               ? Center(
                   child: Column(
@@ -110,11 +132,11 @@ class _HomePageState extends State<HomePage> {
                       const SizedBox(
                         height: 20,
                       ),
-                      Text("UserId: ${user!.uid}"),
+                      // Text("UserId: ${user.uid}"),
                       const SizedBox(
                         height: 20,
                       ),
-                      Text("Registered Phone Number: ${user.phoneNumber}"),
+                      // Text("Registered Phone Number: ${user.phoneNumber}"),
                       const SizedBox(
                         height: 20,
                       ),

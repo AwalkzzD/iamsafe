@@ -1,8 +1,5 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:record/record.dart';
 
 class SoundDetector extends StatefulWidget {
@@ -20,8 +17,8 @@ class _SoundDetectorState extends State<SoundDetector> {
   double minVolume = -45.0;
 
   startTimer() async {
-    timer ??=
-        Timer.periodic(Duration(milliseconds: 50), ((timer) => updateVolume()));
+    timer ??= Timer.periodic(
+        const Duration(milliseconds: 50), ((timer) => updateVolume()));
   }
 
   updateVolume() async {
