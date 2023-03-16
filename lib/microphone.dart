@@ -1,6 +1,10 @@
 import 'dart:async';
+import 'dart:io';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:record/record.dart';
+import 'package:noise_meter/noise_meter.dart';
+import 'package:flutter_sound/flutter_sound.dart';
+import 'package:path_provider/path_provider.dart';
 
 class SoundDetector extends StatefulWidget {
   const SoundDetector({super.key});
@@ -10,54 +14,118 @@ class SoundDetector extends StatefulWidget {
 }
 
 class _SoundDetectorState extends State<SoundDetector> {
-  Record myRecording = Record();
-  Timer? timer;
+  late NoiseMeter _noiseMeter;
+  late StreamSubscription<NoiseReading> _noiseSubscription;
+  final recorder = FlutterSoundRecorder();
+  final audioplayer = AudioPlayer();
+  var path1;
+  var audioFile;
+  bool isRecording = false;
 
-  double volume = 0.0;
-  double minVolume = -45.0;
+  double _dbLevel = 0;
 
-  startTimer() async {
-    timer ??= Timer.periodic(
-        const Duration(milliseconds: 50), ((timer) => updateVolume()));
+  @override
+  void initState() {
+    super.initState();
+    _noiseMeter = NoiseMeter();
+    _startListening();
   }
 
-  updateVolume() async {
-    Amplitude amplitude = await myRecording.getAmplitude();
-    if (amplitude.current > minVolume) {
+  void _startListening() {
+    _noiseSubscription =
+        _noiseMeter.noiseStream.listen((NoiseReading noiseReading) {
       setState(() {
-        volume = (amplitude.current - minVolume) / minVolume;
+        _dbLevel = noiseReading.meanDecibel;
       });
-      print("VOLUME: $volume");
+    });
+  }
+
+  Future<String> get _localPath async {
+    // final directory = await getApplicationDocumentsDirectory();
+    final directory =
+        (await getExternalStorageDirectories(type: StorageDirectory.downloads))!
+            .first;
+    return directory.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/samplerecording');
+  }
+
+  Future _startRecording() async {
+    final file = await _localFile;
+
+    await recorder.openRecorder();
+    await recorder.startRecorder(toFile: file.path);
+
+    if (_dbLevel > 80) {
+      _stopRecording();
     }
   }
 
-  int volume0to(int maxVolumeToDisplay) {
-    return (volume * maxVolumeToDisplay).round().abs();
+  Future _stopRecording() async {
+    path1 = await recorder.stopRecorder();
+    audioFile = File(path1!);
+
+    print('Recorded audio: $audioFile');
+    _noiseSubscription.cancel();
   }
 
-  Future<bool> startRecording() async {
-    if (await myRecording.hasPermission()) {
-      if (!await myRecording.isRecording()) {
-        await myRecording.start();
-      }
-      startTimer();
-      return true;
-    } else {
-      return false;
-    }
+  @override
+  void dispose() {
+    super.dispose();
+    recorder.closeRecorder();
+    audioplayer.dispose();
+    _noiseSubscription.cancel();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: startRecording(),
-      builder: ((context, AsyncSnapshot<bool> snapshot) {
-        return Scaffold(
-          body: Center(
-              child: Text(
-                  snapshot.hasData ? volume0to(200).toString() : "NO DATA")),
-        );
-      }),
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text("Sound Detection"),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            // ignore: prefer_const_literals_to_create_immutables
+            children: [
+              const Text(
+                "Decibel Level",
+                style: TextStyle(fontFamily: "RobotoSlab", fontSize: 30),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                '$_dbLevel',
+                style: const TextStyle(fontSize: 30, fontFamily: "RobotoSlab"),
+              )
+            ],
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.amber,
+          child: const Icon(
+            Icons.play_arrow,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            // _playRecording();
+            setState(() {
+              if (isRecording == false) {
+                _startRecording();
+                isRecording = true;
+              } else {
+                _stopRecording();
+                isRecording = false;
+              }
+            });
+          },
+        ),
+      ),
     );
   }
 }

@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_sms/flutter_sms_web.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:iamsafe/database.dart';
 import 'package:latlong2/latlong.dart';

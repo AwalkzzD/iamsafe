@@ -45,13 +45,15 @@ dependencies:
   geolocator: ^9.0.2
   geocoding: ^2.0.5
   permission_handler: ^10.2.0
-  record: ^4.4.4
   flutter_map: ^3.1.0
   latlong2: ^0.8.1
   location: ^4.4.0
   geofence_flutter: ^2.0.0
   flutter_sms: ^2.3.3
-
+  noise_meter: ^3.1.0
+  flutter_sound: ^9.2.13
+  audioplayers: ^3.0.1
+  path_provider: ^2.0.13
 
 dev_dependencies:
   flutter_test:
