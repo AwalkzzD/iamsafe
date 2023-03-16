@@ -1,11 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:iamsafe/home.dart';
+import 'package:background_sms/background_sms.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ProfilePage extends StatelessWidget {
   final double coverHeight = 250;
   final double profileHeight = 100;
 
   const ProfilePage({super.key});
+
+  void _sendSms() async {
+    await [Permission.sms].request();
+
+    var result = await BackgroundSms.sendMessage(
+        phoneNumber: "9687988645", message: "Hello! Sample message");
+
+    if (result == SmsStatus.sent) {
+      print("Sent");
+    } else {
+      print("Failed");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +107,9 @@ class ProfilePage extends StatelessWidget {
           style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
               backgroundColor: Colors.amber),
-          onPressed: () {},
+          onPressed: () {
+            _sendSms();
+          },
           child: const Text(
             'Edit Photo',
             style: TextStyle(

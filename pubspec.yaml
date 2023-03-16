@@ -49,7 +49,7 @@ dependencies:
   latlong2: ^0.8.1
   location: ^4.4.0
   geofence_flutter: ^2.0.0
-  flutter_sms: ^2.3.3
+  background_sms: ^0.0.4
   noise_meter: ^3.1.0
   flutter_sound: ^9.2.13
   audioplayers: ^3.0.1

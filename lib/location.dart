@@ -10,7 +10,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:geofence_flutter/geofence_flutter.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
-import 'package:flutter_sms/flutter_sms.dart';
+// import 'package:flutter_sms/flutter_sms.dart';
 
 void main(List<String> args) {
   WidgetsFlutterBinding.ensureInitialized();
@@ -125,14 +125,14 @@ class _GeoTrackingState extends State<GeoTracking> {
     }
   }
 
-  void _sendSMS(String message, List<String> recipents) async {
-    String result =
-        await sendSMS(message: message, recipients: recipents, sendDirect: true)
-            .catchError((onError) {
-      print(onError);
-    });
-    print(result);
-  }
+  // void _sendSMS(String message, List<String> recipents) async {
+  //   String result =
+  //       await sendSMS(message: message, recipients: recipents, sendDirect: true)
+  //           .catchError((onError) {
+  //     print(onError);
+  //   });
+  //   print(result);
+  // }
 
   addSafePoints2(String uid, LatLng point) async {
     await DatabaseService().addSafePoint2(
@@ -309,10 +309,10 @@ class _GeoTrackingState extends State<GeoTracking> {
           color: Colors.white,
         ),
         onPressed: () {
-          String message = "This is a test message!";
-          List<String> recipents = ["918734925876"];
-          _sendSMS(message, recipents);
-          _getCurrentPosition();
+          // String message = "This is a test message!";
+          // List<String> recipents = ["918734925876"];
+          // _sendSMS(message, recipents);
+          // _getCurrentPosition();
           setState(() {
             const Icon(Icons.stop_circle_outlined);
           });
