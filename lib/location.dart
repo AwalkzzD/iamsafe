@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,8 @@ import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:geofence_flutter/geofence_flutter.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
-// import 'package:flutter_sms/flutter_sms.dart';
+import 'package:background_sms/background_sms.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main(List<String> args) {
   WidgetsFlutterBinding.ensureInitialized();
@@ -99,24 +99,37 @@ class _GeoTrackingState extends State<GeoTracking> {
         context: context);
   }
 
+  void _sendSms() async {
+    await [Permission.sms].request();
+
+    var result = await BackgroundSms.sendMessage(
+        phoneNumber: "8530314846", message: "Hello! Sample message");
+
+    if (result == SmsStatus.sent) {
+      print("Sent");
+    } else {
+      print("Failed");
+    }
+  }
+
   addSafePoints1(String uid, LatLng point) async {
     await DatabaseService().addSafePoint1(
         uid: uid,
         lat1: point.latitude.toString(),
         lon1: point.longitude.toString());
 
-    // LocationData? location = await _locationService.getLocation();
     await Geofence.startGeofenceService(
         pointedLatitude: point.latitude.toString(),
         pointedLongitude: point.longitude.toString(),
-        radiusMeter: "100",
-        eventPeriodInSeconds: 10);
+        radiusMeter: "200",
+        eventPeriodInSeconds: 3);
 
     // ignore: prefer_conditional_assignment
     if (geofenceEventStream == null) {
       geofenceEventStream =
           Geofence.getGeofenceStream()?.listen((GeofenceEvent event) {
         if (event == GeofenceEvent.enter) {
+          _sendSms();
           print("Inside geofence");
           customToast("Safepoint close to user", context);
           Geofence.stopGeofenceService();
@@ -124,15 +137,6 @@ class _GeoTrackingState extends State<GeoTracking> {
       });
     }
   }
-
-  // void _sendSMS(String message, List<String> recipents) async {
-  //   String result =
-  //       await sendSMS(message: message, recipients: recipents, sendDirect: true)
-  //           .catchError((onError) {
-  //     print(onError);
-  //   });
-  //   print(result);
-  // }
 
   addSafePoints2(String uid, LatLng point) async {
     await DatabaseService().addSafePoint2(
@@ -143,14 +147,15 @@ class _GeoTrackingState extends State<GeoTracking> {
     await Geofence.startGeofenceService(
         pointedLatitude: point.latitude.toString(),
         pointedLongitude: point.longitude.toString(),
-        radiusMeter: "100",
-        eventPeriodInSeconds: 10);
+        radiusMeter: "200",
+        eventPeriodInSeconds: 3);
 
     // ignore: prefer_conditional_assignment
     if (geofenceEventStream == null) {
       geofenceEventStream =
           Geofence.getGeofenceStream()?.listen((GeofenceEvent event) {
         if (event == GeofenceEvent.enter) {
+          _sendSms();
           print("Inside geofence");
           customToast("Safepoint close to user", context);
           Geofence.stopGeofenceService();
@@ -171,11 +176,16 @@ class _GeoTrackingState extends State<GeoTracking> {
 
     final markers = <Marker>[];
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.amber,
+        backgroundColor: Colors.transparent,
+        bottomOpacity: 0.5,
+        elevation: 0.5,
         title: const Text(
           "Select SafePoints",
-          style: TextStyle(fontFamily: 'RobotoSlab'),
+          style: TextStyle(
+            fontFamily: 'EduNSWACTFoundation',
+          ),
         ),
       ),
       body: FutureBuilder(
@@ -196,7 +206,8 @@ class _GeoTrackingState extends State<GeoTracking> {
                             zoom: 5,
                             onLongPress: (tapPosition, point) {
                               showModalBottomSheet<void>(
-                                  backgroundColor: Colors.amber,
+                                  backgroundColor:
+                                      Color.fromARGB(255, 42, 130, 207),
                                   context: context,
                                   builder: ((context) {
                                     return Column(
@@ -259,7 +270,8 @@ class _GeoTrackingState extends State<GeoTracking> {
                                                     builder: (ctx) =>
                                                         const Icon(
                                                           Icons.location_pin,
-                                                          color: Colors.red,
+                                                          color: Color.fromARGB(
+                                                              255, 0, 174, 255),
                                                           size: 40,
                                                         )),
                                               );
@@ -275,7 +287,8 @@ class _GeoTrackingState extends State<GeoTracking> {
                                     point: point,
                                     builder: (ctx) => const Icon(
                                           Icons.location_pin,
-                                          color: Colors.red,
+                                          color:
+                                              Color.fromARGB(255, 0, 174, 255),
                                           size: 40,
                                         )),
                               );
@@ -303,16 +316,12 @@ class _GeoTrackingState extends State<GeoTracking> {
         }),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.amber,
+        backgroundColor: Color.fromRGBO(63, 149, 210, 1),
         child: const Icon(
           Icons.my_location,
           color: Colors.white,
         ),
         onPressed: () {
-          // String message = "This is a test message!";
-          // List<String> recipents = ["918734925876"];
-          // _sendSMS(message, recipents);
-          // _getCurrentPosition();
           setState(() {
             const Icon(Icons.stop_circle_outlined);
           });

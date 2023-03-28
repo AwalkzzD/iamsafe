@@ -5,7 +5,6 @@ import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:iamsafe/database.dart';
 import 'package:iamsafe/home.dart';
 import 'dart:async';
-
 import 'package:pinput/pinput.dart';
 
 void main(List<String> args) {
@@ -28,16 +27,16 @@ class _LoginPageState extends State<LoginPage> {
   void customToast(String message, BuildContext context) {
     showToast(message,
         textStyle: const TextStyle(
-          fontSize: 14,
-          color: Colors.amberAccent,
-          fontFamily: 'RobotoSlab',
+          fontSize: 20,
+          color: Color.fromRGBO(185, 110, 208, 1),
+          fontFamily: 'EduNSWACTFoundation',
         ),
         borderRadius: BorderRadius.circular(15),
         animation: StyledToastAnimation.slideFromTopFade,
         position: StyledToastPosition.top,
         animDuration: const Duration(milliseconds: 50),
         duration: const Duration(seconds: 2),
-        backgroundColor: Colors.grey[600],
+        backgroundColor: Colors.purple.shade50,
         context: context);
   }
 
@@ -89,9 +88,9 @@ class _LoginPageState extends State<LoginPage> {
                   const Text(
                     'Enter OTP...',
                     style: TextStyle(
-                      fontSize: 15,
-                      fontFamily: 'RobotoSlab',
-                      color: Colors.amber,
+                      fontSize: 17,
+                      fontFamily: 'EduNSWACTFoundation',
+                      color: Color.fromRGBO(184, 140, 198, 1.0),
                     ),
                   ),
                   const Padding(
@@ -112,10 +111,11 @@ class _LoginPageState extends State<LoginPage> {
                       height: 50,
                       textStyle: const TextStyle(
                         fontSize: 20,
-                        color: Colors.amber,
+                        color: Color.fromRGBO(184, 140, 198, 1.0),
                       ),
                       decoration: BoxDecoration(
-                        border: Border.all(color: Colors.amber),
+                        border: Border.all(
+                            color: Color.fromRGBO(184, 140, 198, 1.0)),
                         borderRadius: BorderRadius.circular(5),
                       ),
                     ),
@@ -130,19 +130,13 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> signIn(String otp) async {
     final FirebaseAuth _auth = FirebaseAuth.instance;
     try {
-      // await FirebaseAuth.instance
-      //     .signInWithCredential(PhoneAuthProvider.credential(
-      //   verificationId: verificationId,
-      //   smsCode: otp,
-      // ));
-
       UserCredential result = await _auth.signInWithCredential(
           PhoneAuthProvider.credential(
               verificationId: verificationId, smsCode: otp));
 
       User? user = result.user;
 
-      final dBresult = await DatabaseService()
+      await DatabaseService()
           .addUser(uid: user!.uid, phonenum: user.phoneNumber!);
 
       // ignore: use_build_context_synchronously
@@ -172,16 +166,16 @@ class _LoginPageState extends State<LoginPage> {
               const Text(
                 'Welcome to IamSafe',
                 style: TextStyle(
-                  color: Colors.amber,
-                  fontSize: 25,
-                  fontFamily: 'RobotoSlab',
-                  fontWeight: FontWeight.bold,
+                  color: Color.fromRGBO(184, 140, 198, 1.0),
+                  fontSize: 30,
+                  fontFamily: 'EduNSWACTFoundation',
+                  // fontWeight: FontWeight.bold,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 50, 0, 0),
                 child: Image.asset(
-                  'assets/IamSafe.png',
+                  'assets/IamSafe_new.png',
                   height: 230,
                   width: 230,
                 ),
@@ -197,12 +191,12 @@ class _LoginPageState extends State<LoginPage> {
                     color: Colors.black,
                   ),
                   keyboardType: TextInputType.phone,
-                  cursorColor: Colors.amber,
+                  cursorColor: Color.fromRGBO(184, 140, 198, 1.0),
                   decoration: InputDecoration(
                       focusedBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           width: 3,
-                          color: Colors.amber,
+                          color: Color.fromRGBO(184, 140, 198, 1.0),
                         ),
                         borderRadius: BorderRadius.all(
                           Radius.circular(12),
@@ -211,7 +205,7 @@ class _LoginPageState extends State<LoginPage> {
                       enabledBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                           width: 3,
-                          color: Colors.amberAccent,
+                          color: Color.fromRGBO(184, 140, 198, 1.0),
                         ),
                         borderRadius: BorderRadius.all(
                           Radius.circular(12),
@@ -220,14 +214,15 @@ class _LoginPageState extends State<LoginPage> {
                       filled: true,
                       prefixIcon: const Icon(
                         Icons.phone_android,
-                        color: Colors.amber,
+                        color: Color.fromRGBO(184, 140, 198, 1.0),
                       ),
                       hintStyle: TextStyle(
                           color: Colors.grey[600],
-                          fontSize: 13,
+                          fontSize: 15,
+                          fontFamily: 'EduNSWACTFoundation',
                           letterSpacing: 0),
                       hintText: "Enter phone number...",
-                      fillColor: Colors.amber[50]),
+                      fillColor: Colors.purple.shade50),
                   onChanged: (value) {
                     phoneNumber = '+91$value';
                   },
@@ -239,7 +234,7 @@ class _LoginPageState extends State<LoginPage> {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.fromLTRB(15, 7, 15, 7),
-                  backgroundColor: Colors.amber,
+                  backgroundColor: Color.fromRGBO(184, 140, 198, 1.0),
                   elevation: 7.0,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),

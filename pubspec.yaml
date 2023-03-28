@@ -54,6 +54,9 @@ dependencies:
   flutter_sound: ^9.2.13
   audioplayers: ^3.0.1
   path_provider: ^2.0.13
+  flutter_email_sender: ^5.2.0
+  glassmorphism: ^3.0.0
+  fluttercontactpicker: ^4.7.0
 
 dev_dependencies:
   flutter_test:
@@ -78,6 +81,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/
     - assets/IamSafe.png
     - assets/splash_screen_image.png
     - assets/introduction_screen_1.png
@@ -103,6 +107,12 @@ flutter:
     - family: RobotoSlab
       fonts:
         - asset: fonts/RobotoSlab-Regular.ttf
+    - family: Fasthand
+      fonts:
+        - asset: fonts/Fasthand-Regular.ttf
+    - family: EduNSWACTFoundation
+      fonts:
+        - asset: fonts/EduNSWACTFoundation-Regular.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

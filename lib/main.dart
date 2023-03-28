@@ -18,12 +18,12 @@ class SplashScreen extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'SplashScreen',
       home: AnimatedSplashScreen(
-        splash: 'assets/splash_screen_image.png',
+        splash: 'assets/splash_screen_image_2.png',
         nextScreen: CheckLogin(),
-        splashIconSize: 300,
-        duration: 100, //change back to 2000 later
+        splashIconSize: 800,
+        duration: 2000, //change back to 2000 later
         splashTransition: SplashTransition.fadeTransition,
-        backgroundColor: Colors.amber,
+        backgroundColor: Colors.purple.shade50,
       ),
     );
   }

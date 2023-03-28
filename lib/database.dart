@@ -12,6 +12,9 @@ class DatabaseService {
       await usersCollection.doc(uid).set({
         'userID': uid,
         'phoneNum': phonenum,
+        'guardian1': "No data yet!",
+        'guardian2': "No data yet!",
+        'guardian3': "No data yet!",
       }, SetOptions(merge: true));
 
       return "success";
@@ -66,6 +69,26 @@ class DatabaseService {
         'userID': uid,
         'lat2': lat2,
         'lon2': lon2,
+      }, SetOptions(merge: true));
+
+      return "success";
+    } catch (e) {
+      return "error";
+    }
+  }
+
+  Future<String?> addGuardians({
+    required String uid,
+    required String field,
+    required String value,
+  }) async {
+    try {
+      CollectionReference usersCollection =
+          FirebaseFirestore.instance.collection('users');
+
+      await usersCollection.doc(uid).set({
+        'userID': uid,
+        field: value,
       }, SetOptions(merge: true));
 
       return "success";

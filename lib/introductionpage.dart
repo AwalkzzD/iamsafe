@@ -9,8 +9,8 @@ class OnBoardingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const bodyStyle = TextStyle(
-      fontSize: 14.0,
-      fontFamily: 'RobotoSlab',
+      fontSize: 20.0,
+      fontFamily: 'EduNSWACTFoundation',
     );
     const pageDecoration = PageDecoration(
       titleTextStyle: TextStyle(
@@ -39,7 +39,7 @@ class OnBoardingPage extends StatelessWidget {
           image: Container(
             padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
             child: Image.asset(
-              'assets/introduction_screen_1.png',
+              'assets/introduction_screen_1_new.png',
               scale: 2.9,
             ),
           ),
@@ -52,7 +52,7 @@ class OnBoardingPage extends StatelessWidget {
           image: Container(
             padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
             child: Image.asset(
-              'assets/introduction_screen_2.png',
+              'assets/introduction_screen_2_new.png',
               scale: 2.9,
             ),
           ),
@@ -65,7 +65,7 @@ class OnBoardingPage extends StatelessWidget {
           image: Container(
             padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
             child: Image.asset(
-              'assets/introduction_screen_3.png',
+              'assets/introduction_screen_3_new.png',
               scale: 2.9,
             ),
           ),
@@ -76,7 +76,7 @@ class OnBoardingPage extends StatelessWidget {
         style: TextStyle(
           fontFamily: 'RobotoSlab',
           fontWeight: FontWeight.w500,
-          color: Colors.amber,
+          color: Color.fromRGBO(184, 140, 198, 1.0),
         ),
       ),
       onDone: () {
@@ -89,18 +89,18 @@ class OnBoardingPage extends StatelessWidget {
         style: TextStyle(
           fontFamily: 'RobotoSlab',
           fontWeight: FontWeight.w500,
-          color: Colors.amber,
+          color: Color.fromRGBO(184, 140, 198, 1.0),
         ),
       ),
       next: const Icon(
         Icons.arrow_forward,
-        color: Colors.amber,
+        color: Color.fromRGBO(184, 140, 198, 1.0),
       ),
       dotsDecorator: const DotsDecorator(
         size: Size(10.0, 10.0),
         color: Colors.grey,
         activeSize: Size(22.0, 10.0),
-        activeColor: Colors.amber,
+        activeColor: Color.fromRGBO(184, 140, 198, 1.0),
         activeShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(25.0)),
         ),

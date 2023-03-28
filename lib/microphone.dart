@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:noise_meter/noise_meter.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 class SoundDetector extends StatefulWidget {
   const SoundDetector({super.key});
@@ -21,7 +22,6 @@ class _SoundDetectorState extends State<SoundDetector> {
   var path1;
   var audioFile;
   bool isRecording = false;
-
   double _dbLevel = 0;
 
   @override
@@ -69,7 +69,17 @@ class _SoundDetectorState extends State<SoundDetector> {
     audioFile = File(path1!);
 
     print('Recorded audio: $audioFile');
-    _noiseSubscription.cancel();
+
+    final Email email = Email(
+      body: 'Test email 1',
+      subject: 'Test Email',
+      recipients: ['devarshi566@gmail.com'],
+      cc: ['21ituod004@ddu.ac.in'],
+      attachmentPaths: [path1],
+      isHTML: false,
+    );
+
+    await FlutterEmailSender.send(email);
   }
 
   @override
@@ -113,7 +123,6 @@ class _SoundDetectorState extends State<SoundDetector> {
             color: Colors.white,
           ),
           onPressed: () {
-            // _playRecording();
             setState(() {
               if (isRecording == false) {
                 _startRecording();
