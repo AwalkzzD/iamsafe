@@ -4,7 +4,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:iamsafe/checklocation.dart';
 import 'package:iamsafe/database.dart';
+import 'package:iamsafe/microphone.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'package:geofence_flutter/geofence_flutter.dart';
@@ -28,36 +30,38 @@ class _GeoTrackingState extends State<GeoTracking> {
   LocationData? _currentPosition;
   final Location _locationService = Location();
   late final MapController _mapController = MapController();
-  StreamSubscription<GeofenceEvent>? geofenceEventStream;
+  late Map<dynamic, dynamic> _map;
+  final markers = <Marker>[];
 
-  Future<bool> _handleLocationPermission() async {
-    bool serviceEnabled;
-    LocationPermission permission;
+  Future _handleLocationPermission() async {
+    await [Permission.locationWhenInUse].request();
+    // bool serviceEnabled;
+    // LocationPermission permission;
 
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              "Location services are disabled. Please enable the services")));
-      return false;
-    }
+    // serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    // if (!serviceEnabled) {
+    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //       content: Text(
+    //           "Location services are disabled. Please enable the services")));
+    //   return false;
+    // }
 
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Location permissions are denied")));
-        return false;
-      }
-    }
-    if (permission == LocationPermission.deniedForever) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              'Location permissions are permanently denied, we cannot request permissions.')));
-      return false;
-    }
-    return true;
+    // permission = await Geolocator.checkPermission();
+    // if (permission == LocationPermission.denied) {
+    //   permission = await Geolocator.requestPermission();
+    //   if (permission == LocationPermission.denied) {
+    //     ScaffoldMessenger.of(context).showSnackBar(
+    //         const SnackBar(content: Text("Location permissions are denied")));
+    //     return false;
+    //   }
+    // }
+    // if (permission == LocationPermission.deniedForever) {
+    //   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    //       content: Text(
+    //           'Location permissions are permanently denied, we cannot request permissions.')));
+    //   return false;
+    // }
+    // return true;
   }
 
   Future<void> _getCurrentPosition() async {
@@ -84,32 +88,21 @@ class _GeoTrackingState extends State<GeoTracking> {
   }
 
   void customToast(String message, BuildContext context) {
-    showToast(message,
-        textStyle: const TextStyle(
-          fontSize: 14,
-          color: Colors.amberAccent,
-          fontFamily: 'RobotoSlab',
-        ),
-        borderRadius: BorderRadius.circular(15),
-        animation: StyledToastAnimation.slideFromTopFade,
-        position: StyledToastPosition.top,
-        animDuration: const Duration(milliseconds: 50),
-        duration: const Duration(seconds: 2),
-        backgroundColor: Colors.grey[600],
-        context: context);
-  }
-
-  void _sendSms() async {
-    await [Permission.sms].request();
-
-    var result = await BackgroundSms.sendMessage(
-        phoneNumber: "8530314846", message: "Hello! Sample message");
-
-    if (result == SmsStatus.sent) {
-      print("Sent");
-    } else {
-      print("Failed");
-    }
+    showToast(
+      message,
+      textStyle: const TextStyle(
+        fontSize: 20,
+        color: Color.fromRGBO(185, 110, 208, 1),
+        fontFamily: 'EduNSWACTFoundation',
+      ),
+      borderRadius: BorderRadius.circular(15),
+      animation: StyledToastAnimation.slideFromTopFade,
+      position: StyledToastPosition.top,
+      animDuration: const Duration(milliseconds: 50),
+      duration: const Duration(seconds: 2),
+      backgroundColor: Colors.purple.shade50,
+      context: context,
+    );
   }
 
   addSafePoints1(String uid, LatLng point) async {
@@ -117,25 +110,7 @@ class _GeoTrackingState extends State<GeoTracking> {
         uid: uid,
         lat1: point.latitude.toString(),
         lon1: point.longitude.toString());
-
-    await Geofence.startGeofenceService(
-        pointedLatitude: point.latitude.toString(),
-        pointedLongitude: point.longitude.toString(),
-        radiusMeter: "200",
-        eventPeriodInSeconds: 3);
-
-    // ignore: prefer_conditional_assignment
-    if (geofenceEventStream == null) {
-      geofenceEventStream =
-          Geofence.getGeofenceStream()?.listen((GeofenceEvent event) {
-        if (event == GeofenceEvent.enter) {
-          _sendSms();
-          print("Inside geofence");
-          customToast("Safepoint close to user", context);
-          Geofence.stopGeofenceService();
-        }
-      });
-    }
+    customToast("Safepoint Added", context);
   }
 
   addSafePoints2(String uid, LatLng point) async {
@@ -143,29 +118,42 @@ class _GeoTrackingState extends State<GeoTracking> {
         uid: uid,
         lat2: point.latitude.toString(),
         lon2: point.longitude.toString());
+    customToast("Safepoint Added", context);
+  }
 
-    await Geofence.startGeofenceService(
-        pointedLatitude: point.latitude.toString(),
-        pointedLongitude: point.longitude.toString(),
-        radiusMeter: "200",
-        eventPeriodInSeconds: 3);
+  Future getData() async {
+    final user = FirebaseAuth.instance.currentUser;
+    _map = (await DatabaseService().getUser(user!.uid));
 
-    // ignore: prefer_conditional_assignment
-    if (geofenceEventStream == null) {
-      geofenceEventStream =
-          Geofence.getGeofenceStream()?.listen((GeofenceEvent event) {
-        if (event == GeofenceEvent.enter) {
-          _sendSms();
-          print("Inside geofence");
-          customToast("Safepoint close to user", context);
-          Geofence.stopGeofenceService();
-        }
-      });
-    }
+    setState(() {
+      markers.add(
+        Marker(
+          point: LatLng(double.parse(_map['lat1'].toString()),
+              double.parse(_map['lon1'].toString())),
+          builder: (ctx) => const Icon(
+            Icons.location_pin,
+            color: Color.fromARGB(255, 0, 174, 255),
+            size: 40,
+          ),
+        ),
+      );
+      markers.add(
+        Marker(
+          point: LatLng(double.parse(_map['lat2'].toString()),
+              double.parse(_map['lon2'].toString())),
+          builder: (ctx) => const Icon(
+            Icons.location_pin,
+            color: Color.fromARGB(255, 0, 174, 255),
+            size: 40,
+          ),
+        ),
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    getData();
     LatLng currentLatLng;
     if (_currentPosition != null) {
       currentLatLng =
@@ -174,7 +162,6 @@ class _GeoTrackingState extends State<GeoTracking> {
       currentLatLng = LatLng(20.5937, 78.9629);
     }
 
-    final markers = <Marker>[];
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -207,7 +194,7 @@ class _GeoTrackingState extends State<GeoTracking> {
                             onLongPress: (tapPosition, point) {
                               showModalBottomSheet<void>(
                                   backgroundColor:
-                                      Color.fromARGB(255, 42, 130, 207),
+                                      const Color.fromARGB(255, 42, 130, 207),
                                   context: context,
                                   builder: ((context) {
                                     return Column(
@@ -264,17 +251,7 @@ class _GeoTrackingState extends State<GeoTracking> {
                                           ),
                                           onTap: () {
                                             setState(() {
-                                              markers.remove(
-                                                Marker(
-                                                    point: point,
-                                                    builder: (ctx) =>
-                                                        const Icon(
-                                                          Icons.location_pin,
-                                                          color: Color.fromARGB(
-                                                              255, 0, 174, 255),
-                                                          size: 40,
-                                                        )),
-                                              );
+                                              markers.removeLast();
                                             });
                                             Navigator.of(context).pop();
                                           },
@@ -316,15 +293,13 @@ class _GeoTrackingState extends State<GeoTracking> {
         }),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color.fromRGBO(63, 149, 210, 1),
+        backgroundColor: const Color.fromRGBO(63, 149, 210, 1),
         child: const Icon(
           Icons.my_location,
           color: Colors.white,
         ),
         onPressed: () {
-          setState(() {
-            const Icon(Icons.stop_circle_outlined);
-          });
+          _getCurrentPosition();
         },
       ),
     );

@@ -41,18 +41,18 @@ class _GuardianState extends State<Guardian> {
   Future pickContact(String index) async {
     await FlutterContactPicker.requestPermission();
     contact = await FlutterContactPicker.pickPhoneContact();
-    print(contact.phoneNumber.toString());
+    // print(contact.phoneNumber.toString());
     setState(() {
       if (index == "1") {
-        guardian1 = contact.phoneNumber.toString();
+        guardian1 = contact.phoneNumber.toString().substring(20, 30);
         addGuardians("1", guardian1);
       }
       if (index == "2") {
-        guardian2 = contact.phoneNumber.toString();
+        guardian2 = contact.phoneNumber.toString().substring(20, 30);
         addGuardians("2", guardian2);
       }
       if (index == "3") {
-        guardian3 = contact.phoneNumber.toString();
+        guardian3 = contact.phoneNumber.toString().substring(20, 30);
         addGuardians("3", guardian3);
       }
     });

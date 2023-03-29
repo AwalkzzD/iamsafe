@@ -19,7 +19,7 @@ class SplashScreen extends StatelessWidget {
       title: 'SplashScreen',
       home: AnimatedSplashScreen(
         splash: 'assets/splash_screen_image_2.png',
-        nextScreen: CheckLogin(),
+        nextScreen: const CheckLogin(),
         splashIconSize: 800,
         duration: 2000, //change back to 2000 later
         splashTransition: SplashTransition.fadeTransition,

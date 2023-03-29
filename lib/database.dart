@@ -15,6 +15,10 @@ class DatabaseService {
         'guardian1': "No data yet!",
         'guardian2': "No data yet!",
         'guardian3': "No data yet!",
+        'lat1': "28.7041",
+        'lon1': "77.1025",
+        'lat2': "19.0760",
+        'lon2': "72.8777",
       }, SetOptions(merge: true));
 
       return "success";
