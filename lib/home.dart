@@ -14,9 +14,9 @@ import 'package:iamsafe/profilepage.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 
-void main(List<String> args) async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp();
+  await Firebase.initializeApp();
 }
 
 class HomePage extends StatefulWidget {
@@ -28,9 +28,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late Map<dynamic, dynamic> _map;
-  String phoneNum = "+91XXXXXXXX";
-  String userID = "PASJawen2nRL023";
-  List<Offset> _points = [];
+  String phoneNum = "No data found!";
+  String userID = "No data found!";
   late double _startAngle;
   late Offset _startPosition;
 
@@ -44,7 +43,7 @@ class _HomePageState extends State<HomePage> {
       2,
       timerFunction,
       startAt: DateTime(DateTime.now().year, DateTime.now().month,
-          DateTime.now().day, 02, 49, 0, 0, 0),
+          DateTime.now().day, 08, 14, 0, 0, 0),
       exact: true,
       wakeup: true,
     );
@@ -53,17 +52,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     super.dispose();
-  }
-
-  bool _isCircle() {
-    if (_points.length < 3) return false;
-
-    final p1 = _points[0];
-    final p2 = _points[_points.length ~/ 2];
-    final p3 = _points.last;
-    final radius = (p1 - p2).distance;
-    final distanceToCenter = (p3 - (p1 + p2) / 2).distance;
-    return distanceToCenter <= radius / 2;
   }
 
   void customToast(String message, BuildContext context) {
@@ -128,11 +116,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void callTimer() {}
+  User user = FirebaseAuth.instance.currentUser!;
+
   static void timerFunction() async {
-    LocationCheck locationCheck = LocationCheck();
-    locationCheck.getData();
-    locationCheck.checkGeoFence();
+    // LocationCheck locationCheck = LocationCheck();
+    // // final user = await FirebaseAuth.instance.currentUser;
+    // locationCheck.getData(user);
+    // locationCheck.checkGeoFence();
 
     // ignore: avoid_print
     print("Timer achieved");
@@ -173,8 +163,11 @@ class _HomePageState extends State<HomePage> {
         } else {
           double deltaAngle = angle - _startAngle;
           if (deltaAngle.abs() >= pi * 2.0 / 3.0 && distance < 70.0) {
+            // ignore: avoid_print
             print('Gesture was a circle!');
             customToast("Emergency Mode Started", context);
+            LocationCheck locationCheck = LocationCheck();
+            locationCheck.checkGeoFence();
             setState(() {
               _startAngle = 0;
               _startPosition = const Offset(0, 0);

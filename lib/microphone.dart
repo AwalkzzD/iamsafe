@@ -28,7 +28,12 @@ class SoundDetector {
 
   void startListening() {
     noiseSubscription =
-        noiseMeter.noiseStream.listen((NoiseReading noiseReading) {});
+        noiseMeter.noiseStream.listen((NoiseReading noiseReading) {
+      dbLevel = noiseReading.meanDecibel;
+      if (dbLevel > 90) {
+        startRecording();
+      }
+    });
   }
 
   Future<String> get _localPath async {
@@ -58,10 +63,9 @@ class SoundDetector {
     print('Recorded audio: $audioFile');
 
     final Email email = Email(
-      body: 'Test email 1',
-      subject: 'Test Email',
-      recipients: ['devarshi566@gmail.com'],
-      cc: ['21ituod004@ddu.ac.in'],
+      body: 'Recorded Audio File',
+      subject: 'IamSafe Files',
+      recipients: ['21ituod004@ddu.ac.in'],
       attachmentPaths: [path1],
       isHTML: false,
     );
