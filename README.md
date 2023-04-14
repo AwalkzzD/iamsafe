@@ -2,7 +2,7 @@
 
 
 ![image](https://user-images.githubusercontent.com/107313553/231950751-6b333643-c059-468c-a41d-f6703cd64de3.png)
-  IamSafe is an Android application that has been created which comprises various safety measures which can be used by women with a few clicks on the screen, to get quick and easy access to help or to avoid and escape a harmful situation. It uses GPS location tracking to provide a simple and fast way for the registered contacts to know that the user is in trouble and for them to reach the user easily. It also provides safety features such as a voice recording which can help a woman or the police for identification or situational evidence, SOS alert services to notify closed ones of the victim.
+💡  IamSafe is an Android application that has been created which comprises various safety measures which can be used by women with a few clicks on the screen, to get quick and easy access to help or to avoid and escape a harmful situation. It uses GPS location tracking to provide a simple and fast way for the registered contacts to know that the user is in trouble and for them to reach the user easily. It also provides safety features such as a voice recording which can help a woman or the police for identification or situational evidence, SOS alert services to notify closed ones of the victim.
 
   It also provides safety features such as a voice recording which can help a woman or the police for identification or situational evidence, SOS alert services to notify closed ones of the victim.
 
