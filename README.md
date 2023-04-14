@@ -10,15 +10,15 @@ A Flutter based project.
 
 ## Technologies & Tools
 
-👉  Visual Studio Code& Android Studio (for development & emulation)
-👉  Firebase Firestore Database (for Data Storage)
-👉  Firebase Authentication (for Authentication of user i.e. OTP Verification)
-👉  Mapbox Studio (for Physical Layer Map Tile)
+👉  Visual Studio Code& Android Studio (for development & emulation)   
+👉  Firebase Firestore Database (for Data Storage)   
+👉  Firebase Authentication (for Authentication of user i.e. OTP Verification)   
+👉  Mapbox Studio (for Physical Layer Map Tile)   
 
 ## References
 
-📚  Stack Overflow (https://stackoverflow.com/)
-📚  Developers Android (https://developer.android.com/)
-📚  Flutter Docs (https://docs.flutter.dev/)
-📚  Open AI (https://openai.com/)
-📚  Pub.dev (https://pub.dev/)
+📚  Stack Overflow (https://stackoverflow.com/)   
+📚  Developers Android (https://developer.android.com/)   
+📚  Flutter Docs (https://docs.flutter.dev/)   
+📚  Open AI (https://openai.com/)   
+📚  Pub.dev (https://pub.dev/)   
