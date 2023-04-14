@@ -1,20 +1,6 @@
 # iamsafe
 
-div.container p {
-font-family: Arial;
-font-size: 16px;
-font-style: normal;
-font-weight: normal;
-text-decoration: none;
-text-transform: none;
-color: #000000;
-background-color: #ffffff;
-}
-</style>
 
-<div class="container">
-<p>About:</p>
-</div>
 
 🚀  IamSafe is an Android application that has been created which comprises various safety measures which can be used by women with a few clicks on the screen, to get quick and easy access to help or to avoid and escape a harmful situation. It uses GPS location tracking to provide a simple and fast way for the registered contacts to know that the user is in trouble and for them to reach the user easily. It also provides safety features such as a voice recording which can help a woman or the police for identification or situational evidence, SOS alert services to notify closed ones of the victim.
 
